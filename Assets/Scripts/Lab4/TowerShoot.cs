@@ -10,10 +10,12 @@ public class TowerShoot : MonoBehaviour
     public float fireRate = 1f;
     private float fireCountdown = 0f;
 
+    private Projectile_Pooling projectilePool;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        projectilePool = GameObject.Find("PoolManager").GetComponent<Projectile_Pooling>();
     }
 
     // Update is called once per frame
@@ -29,7 +31,7 @@ public class TowerShoot : MonoBehaviour
 
     void Shoot() 
     {
-        GameObject bullet = Instantiate(bulletPrefab, firePos.transform.position, Quaternion.identity);
+        projectilePool.GetObject(firePos.gameObject);
     }
 
     // Detect enemies in range

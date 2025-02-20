@@ -1,3 +1,4 @@
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -6,18 +7,25 @@ public class Projectile : MonoBehaviour
     public float speed = 5f;
     public int damage = 5;
 
+    private Projectile_Pooling projectilePool;
     private GameObject[] target;
 
     void Start()
     {
-        target = GameObject.FindGameObjectsWithTag("Enemy");
+        projectilePool = GameObject.Find("PoolManager").GetComponent<Projectile_Pooling>();
     }
 
     void Update()
     {
+        target = GameObject.FindGameObjectsWithTag("Enemy");
         for (int i = 0; i < target.Length; i++)
         {
             Seek(target[i].transform);
+        }
+
+        if (target.Length == 0)
+        {
+            projectilePool.ReturnObject(gameObject);
         }
     }
 
@@ -25,19 +33,17 @@ public class Projectile : MonoBehaviour
     {
         if (other.gameObject.tag == "Enemy")
         {
-            //other.GetComponent<Enemy>().TakeDamage(damage);
             HitTarget();
         }
     }
 
     public void Seek(Transform target)
     {
-
         transform.position = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
     }
 
     void HitTarget()
     {
-        Destroy(gameObject);
+        projectilePool.ReturnObject(gameObject);
     }
 }

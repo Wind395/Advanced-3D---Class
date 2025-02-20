@@ -178,6 +178,7 @@ MonoBehaviour:
   path: {fileID: 0}
   health: 20
   damage: 1
+  vfxExplosion: {fileID: 276769581148849147, guid: 4891a2a33a554524a8d6b967449d9672, type: 3}
 --- !u!114 &5159056234728907571
 MonoBehaviour:
   m_ObjectHideFlags: 0

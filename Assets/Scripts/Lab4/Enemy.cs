@@ -1,9 +1,11 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class Enemy : Enemies
 {
     private NavMeshAgent _agent;
+    [SerializeField] private GameObject vfxExplosion;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -35,12 +37,20 @@ public class Enemy : Enemies
         }
     }
 
-        void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Projectile")
         {
-            health -= other.GetComponent<Projectile>().damage;
-            Die();
+            StartCoroutine(HitandDie(other.gameObject));
         }
+    }
+
+    IEnumerator HitandDie(GameObject other)
+    {
+        health -= other.GetComponent<Projectile>().damage;
+        GameObject vfx = Instantiate(vfxExplosion, transform.position, Quaternion.identity);
+        yield return new WaitForSeconds(.5f);
+        Destroy(vfx);
+        Die();
     }
 }
